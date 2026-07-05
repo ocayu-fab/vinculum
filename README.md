@@ -1,1 +1,1 @@
-"# vinculum" 
+Vinculum様専用ページ
