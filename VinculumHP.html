@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ウィンクルム デジタル戦略提案 | 合同会社RENパートナーズ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0f1e; }
+body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; font-weight: 900; font-feature-settings: "palt"; color: #111; }
+
+#view { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+#stage { position: relative; width: 1920px; height: 1080px; flex: none; overflow: hidden; background: #fff; }
+#prog { position: absolute; top: 0; left: 0; height: 6px; width: 0; background: linear-gradient(90deg, #1a2744, #D4A017); z-index: 30; }
+
+#cover { position: fixed; inset: 0; background: rgba(10,15,30,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 50; cursor: pointer; }
+#cover .btn { background: #1a2744; color: #D4A017; font-size: 30px; font-weight: 900; letter-spacing: 0.1em; padding: 26px 72px; border-radius: 999px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+
+.slide {
+  position: absolute; top: 0; left: 0; width: 1920px; height: 1080px;
+  isolation: isolate; overflow: hidden; background-color: #ffffff;
+  background-image: linear-gradient(to right, rgba(26,39,68,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(26,39,68,0.08) 1px, transparent 1px);
+  background-size: 36px 36px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 120px 40px;
+}
+.slide::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: linear-gradient(90deg, #1a2744 0%, #2a4a8a 50%, #D4A017 100%); z-index: 2; }
+.slide::before { content: '+'; position: absolute; top: 44px; left: 66px; font-size: 48px; font-weight: 500; line-height: 1; color: #c9d0df; text-shadow: 1760px 0 #c9d0df, 0 906px #c9d0df, 1760px 906px #c9d0df; }
+
+.chip { display: inline-block; background: linear-gradient(90deg, #1a2744, #2a4a8a); color: #fff; font-size: 33px; font-weight: 900; letter-spacing: 0.18em; padding: 14px 52px 16px; border-radius: 999px; margin-bottom: 44px; }
+.kicker { font-size: 54px; font-weight: 900; letter-spacing: 0.04em; line-height: 1.45; margin-bottom: 64px; }
+.small { font-size: 42px; font-weight: 900; letter-spacing: 0.06em; margin-bottom: 20px; }
+.hl { display: inline-block; background: #D4A017; padding: 10px 44px 14px; font-size: 96px; font-weight: 900; letter-spacing: 0.02em; line-height: 1.3; white-space: nowrap; border-radius: 6px; transform: rotate(-1deg); margin-bottom: 70px; color: #1a2744; }
+.hl-sm { font-size: 80px; }
+.grad { background: linear-gradient(100deg, #1a2744 0%, #2a4a8a 45%, #D4A017 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pink { color: #D4A017; }
+.sub { font-size: 47px; font-weight: 900; letter-spacing: 0.04em; line-height: 1.6; }
+.note { font-size: 31px; font-weight: 700; color: #8a94a6; letter-spacing: 0.06em; }
+.slide .ghost { position: absolute; z-index: -1; top: -110px; right: 30px; font-size: 600px; font-weight: 900; line-height: 1; letter-spacing: -0.04em; background: linear-gradient(120deg, #1a2744, #D4A017); -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0.08; }
+.slide .foot-l, .slide .foot-r { position: absolute; bottom: 56px; font-size: 23px; font-weight: 700; letter-spacing: 0.22em; color: #9aa4b5; z-index: 2; }
+.slide .foot-l { left: 84px; }
+.slide .foot-r { right: 84px; }
+.slide .foot-r b { color: #111; }
+
+.cards { display: flex; align-items: center; justify-content: center; gap: 56px; margin-bottom: 70px; }
+.card { background: #fff; border: 4px solid #1a2744; border-radius: 28px; padding: 38px 64px 44px; box-shadow: 0 16px 36px rgba(26,39,68,0.12); }
+.card .label { font-size: 34px; font-weight: 700; color: #6b7280; margin-bottom: 10px; }
+.card .value { font-size: 88px; font-weight: 900; letter-spacing: 0.01em; white-space: nowrap; line-height: 1.2; }
+.card-y { box-shadow: 0 28px 64px rgba(26,39,68,0.2), 0 10px 22px rgba(212,160,23,0.15); }
+.card-grad { border: 4px solid transparent; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(120deg, #1a2744, #2a4a8a, #D4A017) border-box; }
+.cards .arrow { font-size: 100px; font-weight: 900; background: linear-gradient(90deg, #1a2744, #D4A017); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.s1 .eyebrow { font-size: 28px; font-weight: 700; letter-spacing: 0.38em; color: #8a94a6; margin-bottom: 64px; }
+.s1 .title { font-size: 178px; font-weight: 900; letter-spacing: 0; line-height: 1.12; margin-bottom: 56px; }
+.s1 .sub { font-size: 56px; margin-bottom: 90px; }
+.s1 .pill { display: inline-block; border: 3px solid #1a2744; border-radius: 999px; padding: 14px 52px 16px; font-size: 31px; font-weight: 900; letter-spacing: 0.14em; }
+.s1 .ghost { top: auto; bottom: -150px; right: -30px; font-size: 980px; opacity: 0.07; }
+
+.stamp { position: absolute; top: 120px; right: 170px; border: 6px solid #D4A017; border-radius: 14px; color: #D4A017; font-size: 42px; font-weight: 900; letter-spacing: 0.22em; padding: 16px 36px 18px 44px; transform: rotate(9deg); opacity: 0.9; z-index: 1; }
+.gr .big { font-size: 104px; font-weight: 900; letter-spacing: 0.02em; line-height: 1.38; margin-bottom: 64px; }
+.num .label { font-size: 42px; font-weight: 700; color: #6b7280; margin-bottom: 4px; }
+.num .big { font-size: 200px; font-weight: 900; letter-spacing: 0; line-height: 1.15; margin-bottom: 28px; }
+.meter { width: 1000px; height: 30px; background: #e8ecf3; border-radius: 999px; margin-bottom: 72px; overflow: hidden; }
+.meter .fill { width: 80.3%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #1a2744, #2a4a8a, #D4A017); }
+.tags { display: flex; justify-content: center; gap: 30px; margin-bottom: 64px; }
+.tag { background: #1a2744; color: #fff; border-radius: 16px; padding: 18px 42px 22px; font-size: 37px; font-weight: 900; letter-spacing: 0.04em; }
+.tag .x { color: #D4A017; margin-right: 14px; }
+.price .cards { gap: 64px; }
+.price .card { min-width: 440px; padding: 54px 70px 60px; }
+.price .card .label { font-size: 36px; letter-spacing: 0.32em; text-indent: 0.32em; margin-bottom: 6px; }
+.price .value { font-size: 136px; }
+.hl-wrap { position: relative; display: inline-block; margin-bottom: 70px; }
+.hl-wrap .hl { margin-bottom: 0; }
+.now { position: absolute; top: -86px; right: -110px; width: 178px; height: 178px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #D4A017); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 46px; font-weight: 900; letter-spacing: 0.06em; transform: rotate(12deg); z-index: 1; }
+.s10 .action { font-size: 56px; margin-bottom: 0; transform: rotate(-0.6deg); }
+</style>
+</head>
+<body>
+<div id="view"><div id="stage">
+<div id="prog"></div>
+
+<!-- S1: Cover -->
+<div class="slide s1" data-dur="5500">
+  <div class="ghost" data-anim="ghost" data-delay="250">W</div>
+  <div class="eyebrow" data-anim="rise" data-delay="0">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="title grad" data-anim="rise" data-delay="200">ウィンクルム<br>提案書</div>
+  <div class="sub" data-anim="rise" data-delay="500">HP × SNS × AI・DX 統合支援</div>
+  <div class="pill" data-anim="rise" data-delay="720">2026年7月</div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>01</b> / 08</div>
+</div>
+
+<!-- S2: 現状の課題 -->
+<div class="slide" data-dur="7200">
+  <div class="stamp" data-anim="stamp" data-delay="900">要改善</div>
+  <div class="chip" data-anim="rise" data-delay="0">現状の課題</div>
+  <div class="kicker" data-anim="rise" data-delay="140">3つの機会損失が起きています</div>
+  <div class="cards" style="align-items:stretch;gap:44px;width:100%;margin-bottom:0">
+    <div class="card" data-anim="pop" data-delay="420" style="flex:1;padding:36px 44px;text-align:left">
+      <div style="font-size:28px;font-weight:700;color:#D4A017;margin-bottom:12px;letter-spacing:0.1em">課題 ①</div>
+      <div style="font-size:36px;font-weight:900;line-height:1.7;color:#1a2744">実績が埋もれている<br><span style="font-size:26px;color:#888;font-weight:700">サッカーチーム提携など<br>外に出ていない素材が多数</span></div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="580" style="flex:1;padding:36px 44px;text-align:left">
+      <div style="font-size:28px;font-weight:700;color:#D4A017;margin-bottom:12px;letter-spacing:0.1em">課題 ②</div>
+      <div style="font-size:36px;font-weight:900;line-height:1.7;color:#1a2744">採用・問い合わせの<br>導線が弱い<br><span style="font-size:26px;color:#888;font-weight:700">フォーム到達率が低い状態</span></div>
+    </div>
+    <div class="card card-grad" data-anim="pop" data-delay="740" style="flex:1;padding:36px 44px;text-align:left">
+      <div style="font-size:28px;font-weight:700;color:#1a2744;margin-bottom:12px;letter-spacing:0.1em">課題 ③</div>
+      <div style="font-size:36px;font-weight:900;line-height:1.7;color:#1a2744">SNS・採用・広告が<br>バラバラに動いている<br><span style="font-size:26px;color:#888;font-weight:700">相乗効果が生まれていない</span></div>
+    </div>
+  </div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>02</b> / 08</div>
+</div>
+
+<!-- S3: 提案の全体像（WordPress継続活用明記） -->
+<div class="slide" data-dur="7000">
+  <div class="chip" data-anim="rise" data-delay="0">提案の全体像</div>
+  <div class="kicker" data-anim="rise" data-delay="140">「作って終わり」ではなく<br>動き続ける仕組みを作ります</div>
+  <div class="cards" style="gap:40px;margin-bottom:40px">
+    <div class="card" data-anim="pop" data-delay="420" style="min-width:310px;padding:32px 40px">
+      <div style="font-size:48px;margin-bottom:10px">🌐</div>
+      <div style="font-size:26px;font-weight:700;color:#6b7280;margin-bottom:6px">HP制作</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.6;color:#1a2744">WordPress<br>ベース構築</div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="560" style="min-width:310px;padding:32px 40px">
+      <div style="font-size:48px;margin-bottom:10px">📱</div>
+      <div style="font-size:26px;font-weight:700;color:#6b7280;margin-bottom:6px">SNS設計</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.6;color:#1a2744">継続発信の<br>仕組み化</div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="700" style="min-width:310px;padding:32px 40px">
+      <div style="font-size:48px;margin-bottom:10px">📊</div>
+      <div style="font-size:26px;font-weight:700;color:#6b7280;margin-bottom:6px">Lark Base</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.6;color:#1a2744">KPI数値の<br>一元管理</div>
+    </div>
+    <div class="card card-grad" data-anim="pop" data-delay="840" style="min-width:310px;padding:32px 40px">
+      <div style="font-size:48px;margin-bottom:10px">🤖</div>
+      <div style="font-size:26px;font-weight:700;color:#1a2744;margin-bottom:6px">AI・DX</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.6;color:#1a2744">自動化＋<br>AI検索対応</div>
+    </div>
+  </div>
+  <div class="note" data-anim="rise" data-delay="1100">※ 既存WordPress環境の活用については、初回ヒアリング後にご提案いたします</div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>03</b> / 08</div>
+</div>
+
+<!-- S4: 差別化ポイント（機能比較） -->
+<div class="slide" data-dur="7400">
+  <div class="chip" data-anim="rise" data-delay="0">差別化ポイント</div>
+  <div class="kicker" data-anim="rise" data-delay="140">一般的なWeb制作会社との違い</div>
+  <div style="display:flex;gap:64px;width:1700px;justify-content:center;align-items:stretch;margin-bottom:0">
+    <div class="card" data-anim="pop" data-delay="420" style="flex:1;text-align:left;padding:36px 52px">
+      <div style="font-size:30px;font-weight:700;color:#aaa;margin-bottom:24px;text-align:center;letter-spacing:0.08em">一般的なWeb制作会社</div>
+      <div style="font-size:29px;line-height:2.5;color:#bbb;font-weight:700">
+        ✗ 新規CMS環境へ完全移行<br>
+        ✗ デザイン重視・機能は薄め<br>
+        ✗ AI検索（AEO/LLMO）非対応<br>
+        ✗ 制作後のデータ管理なし
+      </div>
+    </div>
+    <div style="display:flex;align-items:center" data-anim="pop" data-delay="620">
+      <span style="font-size:80px;font-weight:900;background:linear-gradient(90deg,#1a2744,#D4A017);-webkit-background-clip:text;background-clip:text;color:transparent">→</span>
+    </div>
+    <div class="card card-grad" data-anim="pop" data-delay="800" style="flex:1;text-align:left;padding:36px 52px">
+      <div style="font-size:30px;font-weight:700;color:#1a2744;margin-bottom:24px;text-align:center;letter-spacing:0.08em">合同会社RENパートナーズ</div>
+      <div style="font-size:29px;line-height:2.5;color:#1a2744;font-weight:700">
+        ✓ WordPressを軸にしたAEO/LLMO対応設計<br>
+        ✓ AEO・LLMO対応コンテンツ設計<br>
+        ✓ AI検索最適化・LLMO対策実装<br>
+        ✓ Lark BaseでKPI自動蓄積・分析
+      </div>
+    </div>
+  </div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>04</b> / 08</div>
+</div>
+
+
+<!-- S6: サービス内容（7項目） -->
+<div class="slide" data-dur="7000">
+  <div class="chip" data-anim="rise" data-delay="0">サービス内容</div>
+  <div class="kicker" data-anim="rise" data-delay="140">提供する7つのサービス</div>
+  <div data-anim="pop" data-delay="420" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;width:1700px;margin-bottom:0">
+    <div class="card" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">01</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">WordPress HP制作<br><span style="font-size:20px;color:#888;font-weight:700">デザイン・コーディング・SEO設定</span></div>
+    </div>
+    <div class="card" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">02</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">採用・実績ページ設計<br><span style="font-size:20px;color:#888;font-weight:700">会社の魅力を正しく伝える</span></div>
+    </div>
+    <div class="card" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">03</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">SNS発信設計<br><span style="font-size:20px;color:#888;font-weight:700">初期コンテンツ制作込み</span></div>
+    </div>
+    <div class="card card-y" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">04</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">Lark Base KPI構築<br><span style="font-size:20px;color:#888;font-weight:700">ダッシュボード設計込み</span></div>
+    </div>
+    <div class="card card-y" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">05</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">AI・LLMO対応設計<br><span style="font-size:20px;color:#888;font-weight:700">AI検索に強いコンテンツ構造</span></div>
+    </div>
+    <div class="card card-y" style="padding:20px 28px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px">06</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">週次レポート自動化<br><span style="font-size:20px;color:#888;font-weight:700">Lark × AI 初期設定</span></div>
+    </div>
+    <div class="card card-grad" style="grid-column:span 3;padding:20px 36px;text-align:left;display:flex;align-items:center;gap:40px">
+      <div style="font-size:24px;font-weight:700;color:#1a2744;white-space:nowrap">07 ＋α</div>
+      <div style="font-size:27px;font-weight:900;line-height:1.5;color:#1a2744">AIアバター事業 定期対応<span style="font-size:20px;color:#888;font-weight:700;margin-left:24px">開発者常駐によるオンタイム更新対応 ／ AIアバター事業の継続的サポートが可能</span></div>
+    </div>
+  </div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>05</b> / 08</div>
+</div>
+
+<!-- S7: ロードマップ（Phase3にOEM可能性） -->
+<div class="slide" data-dur="7600">
+  <div class="chip" data-anim="rise" data-delay="0">ロードマップ</div>
+  <div class="kicker" data-anim="rise" data-delay="140">ウィンクルムの3フェーズ成長計画</div>
+  <div class="cards" style="gap:44px;align-items:stretch;width:100%;margin-bottom:32px">
+    <div class="card" data-anim="pop" data-delay="420" style="flex:1;padding:36px 44px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#aaa;margin-bottom:6px;letter-spacing:0.12em">Phase 1</div>
+      <div style="font-size:40px;font-weight:900;color:#1a2744;margin-bottom:6px">基盤構築</div>
+      <div style="font-size:26px;font-weight:900;color:#D4A017;margin-bottom:16px">1〜2ヶ月</div>
+      <div style="font-size:24px;color:#666;font-weight:700;line-height:2.1">
+        ✓ HP完成<br>✓ SNS設計<br>✓ Lark Base構築
+      </div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="600" style="flex:1;padding:36px 44px;text-align:left">
+      <div style="font-size:24px;font-weight:700;color:#aaa;margin-bottom:6px;letter-spacing:0.12em">Phase 2</div>
+      <div style="font-size:40px;font-weight:900;color:#1a2744;margin-bottom:6px">AI連携強化</div>
+      <div style="font-size:26px;font-weight:900;color:#D4A017;margin-bottom:16px">3〜4ヶ月</div>
+      <div style="font-size:24px;color:#666;font-weight:700;line-height:2.1">
+        ✓ KPI分析自動化<br>✓ SNSアシスト<br>✓ コンテンツ改善
+      </div>
+    </div>
+    <div class="card" data-anim="pop" data-delay="780" style="flex:1;padding:36px 44px;text-align:left;border-style:dashed;border-color:#D4A017">
+      <div style="font-size:24px;font-weight:700;color:#D4A017;margin-bottom:6px;letter-spacing:0.12em">Phase 3（将来ビジョン）</div>
+      <div style="font-size:40px;font-weight:900;color:#1a2744;margin-bottom:6px">スケール</div>
+      <div style="font-size:26px;font-weight:900;color:#D4A017;margin-bottom:16px">5ヶ月〜</div>
+      <div style="font-size:24px;color:#666;font-weight:700;line-height:2.1">
+        ✓ 採用コスト削減<br>✓ 広告費最適化<br>✓ 「ウィンクルム式」OEM展開の可能性
+      </div>
+    </div>
+  </div>
+  <div class="note" data-anim="rise" data-delay="1300">※ Phase 3はご状況に応じてご提案します。OEM展開はあくまでも将来の可能性としての提示です。</div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>06</b> / 08</div>
+</div>
+
+<!-- S8: 見積もり -->
+<div class="slide" data-dur="7200">
+  <div class="chip" data-anim="rise" data-delay="0">初期費用</div>
+  <div class="kicker" data-anim="rise" data-delay="140">合計 <span class="pink">900,000円</span>（税込）</div>
+  <div data-anim="pop" data-delay="420" style="width:1500px;border-radius:20px;overflow:hidden;border:4px solid #1a2744;margin-bottom:28px">
+    <div style="display:grid;grid-template-columns:1fr auto">
+      <div style="background:#1a2744;color:#fff;padding:14px 36px;font-size:26px;font-weight:900;letter-spacing:0.1em">項目</div>
+      <div style="background:#1a2744;color:#D4A017;padding:14px 48px;font-size:26px;font-weight:900;letter-spacing:0.1em;text-align:right;white-space:nowrap">金額</div>
+      <div style="background:#fff;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:1px solid #e0e4ed">WordPress HP制作（設計・デザイン・実装）</div>
+      <div style="background:#fff;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:1px solid #e0e4ed;white-space:nowrap">400,000円</div>
+      <div style="background:#f7f9fc;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:1px solid #e0e4ed">コンテンツ整理・ライティング</div>
+      <div style="background:#f7f9fc;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:1px solid #e0e4ed;white-space:nowrap">100,000円</div>
+      <div style="background:#fff;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:1px solid #e0e4ed">SNS設計・初期コンテンツ制作</div>
+      <div style="background:#fff;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:1px solid #e0e4ed;white-space:nowrap">100,000円</div>
+      <div style="background:#f7f9fc;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:1px solid #e0e4ed">Lark Base KPIダッシュボード構築</div>
+      <div style="background:#f7f9fc;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:1px solid #e0e4ed;white-space:nowrap">100,000円</div>
+      <div style="background:#fff;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:1px solid #e0e4ed">AI・LLMO対応設計・初期実装</div>
+      <div style="background:#fff;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:1px solid #e0e4ed;white-space:nowrap">150,000円</div>
+      <div style="background:#f7f9fc;padding:12px 36px;font-size:25px;font-weight:700;color:#333;border-bottom:2px solid #1a2744">全体ディレクション</div>
+      <div style="background:#f7f9fc;padding:12px 48px;font-size:25px;font-weight:900;color:#1a2744;text-align:right;border-bottom:2px solid #1a2744;white-space:nowrap">50,000円</div>
+      <div style="background:linear-gradient(90deg,#1a2744,#2a4a8a);padding:16px 36px;font-size:28px;font-weight:900;color:#fff">合計（税込）</div>
+      <div style="background:linear-gradient(90deg,#2a4a8a,#D4A017);padding:16px 48px;font-size:28px;font-weight:900;color:#fff;text-align:right;white-space:nowrap">900,000円</div>
+    </div>
+  </div>
+  <div class="note" data-anim="rise" data-delay="1200">※ 保守運用・広告運用・AI API利用料・追加ページは別途</div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>07</b> / 08</div>
+</div>
+
+<!-- S9: 選ばれる理由（まとめ） -->
+<div class="slide gr s10" data-dur="8000">
+  <div class="chip" data-anim="rise" data-delay="0">選ばれる理由</div>
+  <div class="kicker" data-anim="rise" data-delay="140">合同会社RENパートナーズが<br>選ばれる3つの強み</div>
+  <div class="cards" style="gap:44px;align-items:stretch;width:100%;margin-bottom:56px">
+    <div class="card card-y" data-anim="pop" data-delay="420" style="flex:1;padding:34px 40px;text-align:left">
+      <div style="font-size:44px;margin-bottom:10px">🔧</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.7;color:#1a2744">Lark・AI・DXの<br>実運用経験<br><span style="font-size:22px;color:#888;font-weight:700">「動く仕組み」ごと<br>提案できる</span></div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="580" style="flex:1;padding:34px 40px;text-align:left">
+      <div style="font-size:44px;margin-bottom:10px">🏢</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.7;color:#1a2744">人材業界への<br>深い理解<br><span style="font-size:22px;color:#888;font-weight:700">採用・集客の<br>導線設計が得意</span></div>
+    </div>
+    <div class="card card-y" data-anim="pop" data-delay="740" style="flex:1;padding:34px 40px;text-align:left">
+      <div style="font-size:44px;margin-bottom:10px">⚡</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.7;color:#1a2744">開発者常駐で<br>オンタイム対応<br><span style="font-size:22px;color:#888;font-weight:700">AIアバター事業も<br>継続サポート可能</span></div>
+    </div>
+    <div class="card card-grad" data-anim="pop" data-delay="900" style="flex:1;padding:34px 40px;text-align:left">
+      <div style="font-size:44px;margin-bottom:10px">🤝</div>
+      <div style="font-size:28px;font-weight:900;line-height:1.7;color:#1a2744">作って終わりでは<br>なく伴走型<br><span style="font-size:22px;color:#888;font-weight:700">KPI改善まで<br>一緒に走る</span></div>
+    </div>
+  </div>
+  <div class="hl action" data-anim="sweep" data-delay="1200">ご相談ください</div>
+  <div class="foot-l">WINKLUM × 合同会社RENパートナーズ</div>
+  <div class="foot-r"><b>08</b> / 08</div>
+</div>
+
+</div></div>
+<div id="cover"><div class="btn">▶ 再生する</div></div>
+<script>
+(function () {
+  var FADE = 450;
+  var DEFAULT_LEN = { rise: 600, pop: 650, sweep: 520, stamp: 380, popback: 520, ghost: 900, fill: 1100, count: 1100 };
+  var stage = document.getElementById('stage'); var prog = document.getElementById('prog');
+  var cover = document.getElementById('cover'); var coverBtn = cover.querySelector('.btn');
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
+  var meta = slides.map(function (s) {
+    var els = Array.prototype.slice.call(s.querySelectorAll('[data-anim]')).map(function (el) {
+      var fx = el.dataset.anim;
+      return { el: el, fx: fx, delay: +(el.dataset.delay || 0), len: +(el.dataset.len || DEFAULT_LEN[fx] || 600), baseOp: parseFloat(getComputedStyle(el).opacity) || 1, w: +(el.dataset.w || 0), count: +(el.dataset.count || 0) };
+    });
+    return { el: s, dur: +(s.dataset.dur || 6000), els: els };
+  });
+  var starts = []; var acc = 0;
+  meta.forEach(function (m) { starts.push(acc); acc += m.dur - FADE; });
+  var total = starts[meta.length - 1] + meta[meta.length - 1].dur;
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function easeOutCubic(p) { return 1 - Math.pow(1 - p, 3); }
+  function easeOutBack(p) { var k = 1.70158, s = p - 1; return 1 + s * s * ((k + 1) * s + k); }
+  function applyFx(a, local, tAbs) {
+    var p = clamp((local - a.delay) / a.len, 0, 1); var e = easeOutCubic(p); var s = a.el.style;
+    switch (a.fx) {
+      case 'rise': s.opacity = p; s.transform = 'translateY(' + (1 - e) * 26 + 'px)'; break;
+      case 'pop': s.opacity = p; s.transform = 'translateY(' + (1 - e) * 18 + 'px) scale(' + (0.94 + 0.06 * e) + ')'; break;
+      case 'sweep': s.opacity = p > 0 ? 1 : 0; s.clipPath = p >= 1 ? 'none' : 'inset(-12% ' + (1 - e) * 100 + '% -12% -3%)'; break;
+      case 'stamp': s.opacity = 0.9 * p; s.transform = 'rotate(9deg) scale(' + (1 + (1 - e) * 0.9) + ')'; break;
+      case 'popback': s.opacity = clamp(p * 2, 0, 1); s.transform = 'rotate(12deg) scale(' + (p > 0 ? easeOutBack(p) : 0) + ')'; break;
+      case 'ghost': s.opacity = a.baseOp * p; s.transform = 'translateY(' + Math.sin(tAbs / 2600) * 7 + 'px)'; break;
+      case 'fill': s.width = (a.w * e) + '%'; break;
+      case 'count': s.opacity = clamp(p * 3, 0, 1); a.el.textContent = (p >= 1 ? a.count : (a.count * e).toFixed(1)) + '%'; break;
+    }
+  }
+  function render(t) {
+    t = clamp(t, 0, total); prog.style.width = (t / total * 100) + '%';
+    meta.forEach(function (m, i) {
+      var st = starts[i]; var last = i === meta.length - 1;
+      var visible = t >= st && (last ? t <= st + m.dur : t < st + m.dur);
+      if (!visible) { m.el.style.display = 'none'; return; }
+      m.el.style.display = 'flex'; m.el.style.opacity = i === 0 ? 1 : clamp((t - st) / FADE, 0, 1);
+      var local = t - st - (i === 0 ? 150 : FADE * 0.7);
+      m.els.forEach(function (a) { applyFx(a, local, t); });
+    });
+  }
+  var playing = false; var tCur = 0; var wall = 0;
+  function tick(now) { if (!playing) return; tCur += now - wall; wall = now; if (tCur >= total) { tCur = total; render(tCur); playing = false; coverBtn.textContent = '↻ もう一度見る'; cover.style.display = 'flex'; return; } render(tCur); requestAnimationFrame(tick); }
+  function play() { if (tCur >= total) tCur = 0; playing = true; requestAnimationFrame(function (now) { wall = now; requestAnimationFrame(tick); }); }
+  function fit() { var sc = Math.min(window.innerWidth / 1920, window.innerHeight / 1080); stage.style.transform = 'scale(' + sc + ')'; }
+  window.addEventListener('resize', fit); fit();
+  cover.addEventListener('click', function () { cover.style.display = 'none'; play(); });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.code === 'Space') { ev.preventDefault(); if (playing) { playing = false; } else { cover.style.display = 'none'; play(); } }
+    if (ev.code === 'ArrowRight' || ev.code === 'ArrowLeft') { var i = 0; while (i < starts.length - 1 && starts[i + 1] <= tCur) i++; i += ev.code === 'ArrowRight' ? 1 : -1; i = clamp(i, 0, starts.length - 1); tCur = starts[i]; render(tCur); }
+    if (ev.code === 'KeyR') { tCur = 0; render(0); }
+  });
+  window.__seek = function (ms) { playing = false; tCur = clamp(ms, 0, total); render(tCur); };
+  window.__total = function () { return total; };
+  document.fonts.ready.then(function () { render(0); var q = new URLSearchParams(location.search); if (q.has('t')) { cover.style.display = 'none'; window.__seek(+q.get('t')); } else if (q.has('autostart')) { cover.style.display = 'none'; play(); } window.__ready = true; });
+})();
+</script>
+</body>
+</html>
