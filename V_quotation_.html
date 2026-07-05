@@ -1,34 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <style id="pwgate-style">body{visibility:hidden !important;}</style>
-  <script>
-    (function(){
-      var PW = "vinculumNo1";
-      function buildGate(){
-        var ov = document.createElement("div");
-        ov.id = "pwgateOverlay";
-        ov.style.cssText = "position:fixed;inset:0;background:#0a0f1e;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;z-index:2147483647;visibility:visible;";
-        ov.innerHTML = "<div style=\"margin-bottom:16px;font-size:18px;\">パスワードを入力してください</div><input id=\"pwgateInput\" type=\"password\" style=\"padding:10px;font-size:16px;border-radius:6px;border:none;width:240px;text-align:center;\"><button id=\"pwgateBtn\" style=\"margin-top:12px;padding:10px 24px;background:#D4A017;color:#1a2744;border:none;border-radius:999px;font-weight:700;cursor:pointer;\">送信</button><div id=\"pwgateErr\" style=\"color:#ff6b6b;margin-top:10px;height:20px;\"></div>";
-        document.body.appendChild(ov);
-        function check(){
-          var v = document.getElementById("pwgateInput").value;
-          if(v === PW){
-            ov.remove();
-            var st = document.getElementById("pwgate-style");
-            if(st){ st.remove(); }
-          } else {
-            document.getElementById("pwgateErr").textContent = "パスワードが違います";
-          }
-        }
-        document.getElementById("pwgateBtn").addEventListener("click", check);
-        document.getElementById("pwgateInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ check(); } });
-      }
-      document.addEventListener("DOMContentLoaded", buildGate);
-    })();
-  </script>
-  
-  </script>
 <meta charset="UTF-8">
 <title>見積書 | 合同会社RENパートナーズ</title>
 <style>
@@ -271,8 +243,7 @@ table.totals .grand td {
 
 <div class="header-grid">
   <div class="client-block">
-    <div class="client-name">ウィンクルム株式会社</div>
-    <div class="honorific">御中</div>
+    <div class="client-name">Vinculum株式会社 様</div>
   </div>
   <div class="meta-block">
     <div class="issuer-name">合同会社RENパートナーズ</div>
@@ -287,7 +258,7 @@ table.totals .grand td {
 <div class="summary-box">
   <div>
     <div class="subject-label">件　名</div>
-    <div class="subject-text">ウィンクルム デジタル戦略支援 初期構築費用</div>
+    <div class="subject-text">Vinculum株式会社 様 デジタル戦略支援 初期構築費用</div>
   </div>
   <div>
     <div class="amount-label">お見積金額（税込）</div>
@@ -310,43 +281,36 @@ table.totals .grand td {
       <td>WordPress HP制作（設計・デザイン・実装）</td>
       <td class="c">1</td>
       <td class="c">式</td>
-      <td class="r">362,000</td>
-      <td class="r">362,000</td>
+      <td class="r">320,000</td>
+      <td class="r">320,000</td>
     </tr>
     <tr>
       <td>コンテンツ整理・ライティング支援</td>
       <td class="c">1</td>
       <td class="c">式</td>
-      <td class="r">88,000</td>
-      <td class="r">88,000</td>
-    </tr>
-    <tr>
-      <td>SNS発信設計・初期コンテンツ制作</td>
-      <td class="c">1</td>
-      <td class="c">式</td>
-      <td class="r">93,000</td>
-      <td class="r">93,000</td>
+      <td class="r">98,000</td>
+      <td class="r">98,000</td>
     </tr>
     <tr>
       <td>Lark Base KPIダッシュボード構築</td>
       <td class="c">1</td>
       <td class="c">式</td>
-      <td class="r">96,000</td>
-      <td class="r">96,000</td>
+      <td class="r">143,000</td>
+      <td class="r">143,000</td>
     </tr>
     <tr>
       <td>AI・LLMO対応設計・初期実装</td>
       <td class="c">1</td>
       <td class="c">式</td>
-      <td class="r">141,000</td>
-      <td class="r">141,000</td>
+      <td class="r">216,000</td>
+      <td class="r">216,000</td>
     </tr>
     <tr>
       <td>全体ディレクション・プロジェクト管理</td>
       <td class="c">1</td>
       <td class="c">式</td>
-      <td class="r">38,000</td>
-      <td class="r">38,000</td>
+      <td class="r">41,000</td>
+      <td class="r">41,000</td>
     </tr>
   </tbody>
 </table>
