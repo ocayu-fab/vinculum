@@ -7,15 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; background: #0a0f1e; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0f1e; }
 body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; font-weight: 900; font-feature-settings: "palt"; color: #111; }
 
-/* 静止版: 全スライドを縦に並べて表示（アニメーションなし） */
-#view { display: block; }
-#stage { position: relative; width: 1920px; margin: 0 auto; }
+/* 静止版: アニメーションなし。← → キー / 画面下のボタンでスライド移動 */
+#view { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+#stage { position: relative; width: 1920px; height: 1080px; flex: none; overflow: hidden; background: #fff; }
 
 .slide {
-  position: relative; width: 1920px; height: 1080px; margin: 0 0 24px;
+  position: absolute; top: 0; left: 0; width: 1920px; height: 1080px;
   isolation: isolate; overflow: hidden; background-color: #ffffff;
   background-image: linear-gradient(to right, rgba(26,39,68,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(26,39,68,0.08) 1px, transparent 1px);
   background-size: 36px 36px;
@@ -71,9 +71,22 @@ body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fon
 .now { position: absolute; top: -86px; right: -110px; width: 178px; height: 178px; border-radius: 50%; background: linear-gradient(135deg, #1a2744, #D4A017); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 46px; font-weight: 900; letter-spacing: 0.06em; transform: rotate(12deg); z-index: 1; }
 .s10 .action { font-size: 56px; margin-bottom: 0; transform: rotate(-0.6deg); }
 
+/* 1枚ずつ表示（.active のスライドのみ） */
+.slide { display: none; }
+.slide.active { display: flex; }
+
+/* 下部ナビゲーション */
+#nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 40; background: rgba(26,39,68,0.88); border-radius: 999px; padding: 8px 14px; user-select: none; }
+#nav button { background: none; border: none; color: #fff; font-family: inherit; font-size: 24px; font-weight: 900; line-height: 1; padding: 6px 16px; cursor: pointer; border-radius: 999px; }
+#nav button:hover { background: rgba(255,255,255,0.15); color: #D4A017; }
+#pageNum { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; min-width: 64px; text-align: center; }
+
 @media print {
-  html, body { background: #fff; }
-  .slide { margin: 0; page-break-after: always; break-after: page; }
+  html, body { background: #fff; overflow: visible; }
+  #view { position: static; display: block; }
+  #stage { height: auto; overflow: visible; }
+  #nav { display: none; }
+  .slide { display: flex; position: relative; margin: 0; page-break-after: always; break-after: page; }
   .slide:last-child { page-break-after: auto; break-after: auto; }
 }
 </style>
@@ -378,16 +391,42 @@ body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif; fon
 </div>
 
 </div></div>
+<div id="nav">
+  <button id="navPrev" title="前のスライド（←）">‹</button>
+  <div id="pageNum">1 / 9</div>
+  <button id="navNext" title="次のスライド（→）">›</button>
+</div>
 <script>
-// 静止版: 画面幅に合わせてスライドを縮小表示するのみ（アニメーションなし）
+// 静止版: アニメーションなし。← → キー / 下部ボタン / クリックでスライド移動
 (function () {
   var stage = document.getElementById('stage');
-  function fit() {
-    var sc = Math.min(window.innerWidth / 1920, 1);
-    stage.style.zoom = sc;
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
+  var pageNum = document.getElementById('pageNum');
+  var cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('active', j === cur); });
+    pageNum.textContent = (cur + 1) + ' / ' + slides.length;
   }
-  window.addEventListener('resize', fit);
-  fit();
+  function fit() {
+    var sc = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    stage.style.transform = 'scale(' + sc + ')';
+  }
+  window.addEventListener('resize', fit); fit();
+  document.addEventListener('keydown', function (ev) {
+    if (ev.code === 'ArrowRight' || ev.code === 'Space' || ev.code === 'PageDown') { ev.preventDefault(); show(cur + 1); }
+    if (ev.code === 'ArrowLeft' || ev.code === 'PageUp') { ev.preventDefault(); show(cur - 1); }
+    if (ev.code === 'Home') show(0);
+    if (ev.code === 'End') show(slides.length - 1);
+  });
+  document.getElementById('navPrev').addEventListener('click', function () { show(cur - 1); });
+  document.getElementById('navNext').addEventListener('click', function () { show(cur + 1); });
+  // スライド本体クリックでも進む（左1/4クリックで戻る）
+  stage.addEventListener('click', function (ev) {
+    var r = stage.getBoundingClientRect();
+    show((ev.clientX - r.left) / r.width < 0.25 ? cur - 1 : cur + 1);
+  });
+  show(0);
 })();
 </script>
 </body>
