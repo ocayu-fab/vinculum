@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinculum co.,ltd. | 扉の先へ</title>
+<style>
+  :root{
+    --navy:#1a2744;
+    --navy-deep:#0a0f1e;
+    --navy-light:#2a4a8a;
+    --gold:#D4A017;
+    --text:#c9d0df;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--navy-deep);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",'Segoe UI',sans-serif;
+    color:var(--text);
+    overflow-x:hidden;
+  }
+  #scroller{height:1400vh;}
+
+  #stage{position:fixed;inset:0;overflow:hidden;}
+  .layer{position:absolute;inset:0;will-change:transform,opacity;}
+
+  /* ===== 宇宙（最背面） ===== */
+  #space{
+    background:radial-gradient(ellipse at 50% 120%, #14224a 0%, var(--navy-deep) 55%, #05070f 100%);
+    z-index:1;
+  }
+  .stars{position:absolute;inset:-100px;}
+  #stars2{animation:twinkle 3.5s ease-in-out infinite alternate;}
+  @keyframes twinkle{from{opacity:.35;}to{opacity:1;}}
+  #earth{
+    position:absolute;left:50%;bottom:-58vmin;
+    width:120vmin;height:120vmin;margin-left:-60vmin;
+    border-radius:50%;
+    background:radial-gradient(circle at 38% 30%, #7db8e8 0%, #3a7bc8 30%, #1c4a8a 60%, #0d2a55 100%);
+    box-shadow:0 0 60px 10px rgba(120,180,240,.45), inset -30px -30px 80px rgba(0,0,20,.6);
+    opacity:0;
+  }
+  #earth::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(ellipse 30% 14% at 30% 32%, rgba(255,255,255,.75), transparent 70%),
+      radial-gradient(ellipse 34% 12% at 62% 50%, rgba(255,255,255,.55), transparent 70%);
+    filter:blur(2px);
+  }
+
+  /* ===== 宇宙本社（10_clean.jpg） ===== */
+  #plane-hq{
+    z-index:2;
+    background:url("assets/win2/10_clean.jpg") center/cover;
+    opacity:0;
+  }
+  #plane-hq::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to top, rgba(5,7,15,.72) 0%, transparent 38%);
+  }
+  #finale{
+    position:absolute;left:50%;bottom:7vh;
+    transform:translate(-50%,0);
+    text-align:center;
+    opacity:0;
+    width:min(92vw,760px);
+    z-index:3;
+  }
+  #finale .logo{
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:clamp(28px,6vw,56px);
+    letter-spacing:.06em;
+    color:var(--gold);
+    text-shadow:0 0 24px rgba(212,160,23,.55),0 0 60px rgba(212,160,23,.3),0 2px 18px rgba(0,0,0,.8);
+  }
+  #finale .sub{
+    margin-top:12px;
+    font-size:clamp(13px,2.4vw,18px);
+    letter-spacing:.2em;
+    color:#e8ecf4;
+    text-shadow:0 1px 14px rgba(0,0,0,.9);
+  }
+  #finale .sub em{font-style:normal;color:#fff;}
+  #finale .cta{
+    display:inline-block;margin-top:26px;
+    padding:14px 46px;
+    border:1px solid var(--gold);
+    color:var(--gold);
+    background:rgba(10,15,30,.45);
+    text-decoration:none;
+    letter-spacing:.3em;
+    font-size:clamp(12px,2vw,15px);
+    transition:background .3s,color .3s,box-shadow .3s;
+  }
+  #finale .cta:hover{background:var(--gold);color:var(--navy-deep);box-shadow:0 0 30px rgba(212,160,23,.6);}
+
+  /* ===== 宇宙遊泳する社長 ===== */
+  #kitanaut{
+    position:absolute;left:0;top:0;
+    width:34vmin;z-index:3;
+    opacity:0;
+    filter:drop-shadow(0 0 24px rgba(120,180,240,.35));
+  }
+  #kitanaut svg{width:100%;height:auto;display:block;animation:swim 5s ease-in-out infinite;}
+  @keyframes swim{0%,100%{transform:rotate(-6deg) translateY(0);}50%{transform:rotate(4deg) translateY(-2vmin);}}
+
+  /* ===== リゾート（生成画像差し替え想定のCSSプレースホルダ） ===== */
+  #resort{
+    z-index:4;opacity:0;
+    background:
+      linear-gradient(to bottom,
+        #241640 0%, #5a2a60 26%, #a04a6a 44%, #ff8a5c 58%, #ffc98a 66%,
+        #6a3a5a 66.2%, #3a2545 82%,
+        #2a1c16 82.2%, #1c120e 100%);
+  }
+  #resort .sun{
+    position:absolute;left:50%;top:57%;
+    width:16vmin;height:16vmin;margin-left:-8vmin;
+    border-radius:50%;
+    background:radial-gradient(circle,#fff0c0 0%,#ffcf7e 55%,rgba(255,190,110,0) 75%);
+    box-shadow:0 0 80px 30px rgba(255,190,110,.5);
+  }
+  #resort .glitter{
+    position:absolute;left:44%;top:66%;width:12%;height:16%;
+    background:repeating-linear-gradient(to bottom,rgba(255,220,160,.5) 0 2px,transparent 2px 7px);
+    filter:blur(1px);opacity:.7;
+  }
+  #resort svg.deco{position:absolute;inset:0;width:100%;height:100%;}
+
+  /* ===== ビーチ（生成画像差し替え想定のCSSプレースホルダ） ===== */
+  #beach{
+    z-index:5;opacity:0;
+    background:
+      linear-gradient(to bottom,
+        #6fc0ef 0%, #a8dcf8 40%, #dff2fc 52%,
+        #1f7fb8 52.2%, #56b2dc 74%, #bfe8f2 77%,
+        #f2e2c0 77.2%, #e0c9a0 100%);
+  }
+  #beach .sun{
+    position:absolute;right:12%;top:10%;
+    width:14vmin;height:14vmin;border-radius:50%;
+    background:radial-gradient(circle,#fffbe8 20%,#ffe9a0 60%,rgba(255,240,180,0) 75%);
+    box-shadow:0 0 60px 24px rgba(255,240,180,.55);
+  }
+  #beach .cloud{
+    position:absolute;
+    width:30vmax;height:8vmax;border-radius:50%;
+    background:radial-gradient(ellipse,rgba(255,255,255,.95) 0%,rgba(255,255,255,.4) 55%,transparent 75%);
+    filter:blur(4px);
+  }
+  #beach .foam{
+    position:absolute;left:0;right:0;top:76%;height:2.4%;
+    background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.9),rgba(255,255,255,.25) 70%,transparent);
+    filter:blur(2px);
+  }
+  #beach svg.deco{position:absolute;inset:0;width:100%;height:100%;}
+
+  /* 休暇中の社長（共通） */
+  .kitano-wrap{position:absolute;}
+  .kitano-wrap img{width:100%;display:block;}
+  .kitano-wrap svg.acc{position:absolute;inset:0;width:100%;height:100%;}
+  #beach .kitano-wrap{right:5vw;bottom:-4vh;width:52vmin;}
+  #resort .kitano-wrap{left:8vw;bottom:-3vh;width:48vmin;filter:sepia(.3) saturate(1.15) brightness(.82) contrast(1.05);}
+
+  /* ===== フラッシュ ===== */
+  #flash{
+    z-index:17;
+    background:radial-gradient(circle at 50% 45%,#ffffff 0%,#eaf4ff 45%,rgba(255,255,255,0) 80%);
+    opacity:0;pointer-events:none;
+  }
+
+  /* ===== 写真プレーン（1〜9） ===== */
+  .plane{opacity:0;background-position:center;background-size:cover;}
+  .plane::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse at center,transparent 58%,rgba(10,15,30,.4) 100%);
+  }
+  #p1{z-index:15;background-image:url("assets/win2/1.jpg");}
+  #p2{z-index:14;background-image:url("assets/win2/2.png");}
+  #p3{z-index:13;background-image:url("assets/win2/3.png");}
+  #p4{z-index:12;background-image:url("assets/win2/4.jpg");}
+  #p5{z-index:11;background-image:url("assets/win2/5.jpg");}
+  #p6{z-index:10;background-image:url("assets/win2/6.jpg");}
+  #p7{z-index:9;background-image:url("assets/win2/7.jpg");}
+  #p8{z-index:8;background-image:url("assets/win2/8.jpg");}
+  #p9{z-index:7;background-image:url("assets/win2/9_ceo.jpg");transform-origin:42% 46%;}
+
+  /* ===== エレベーター演出 ===== */
+  #lift{position:absolute;inset:0;z-index:16;pointer-events:none;overflow:hidden;}
+  .lpanel{
+    position:absolute;top:0;bottom:0;width:51%;
+    background:
+      linear-gradient(to right,#8d949e 0%,#b8bec8 18%,#9aa1ab 42%,#c8ced8 60%,#8d949e 82%,#a8aeb8 100%);
+    box-shadow:inset 0 0 6vmin rgba(0,0,0,.35);
+  }
+  #lp-l{left:0;transform:translateX(-102%);}
+  #lp-l::after{content:"";position:absolute;right:0;top:0;bottom:0;width:.5vmin;background:#4a4f58;}
+  #lp-r{right:0;transform:translateX(102%);}
+  #lp-r::after{content:"";position:absolute;left:0;top:0;bottom:0;width:.5vmin;background:#4a4f58;}
+  #lfloor{
+    position:absolute;left:50%;top:9%;
+    transform:translateX(-50%);
+    padding:1vmin 3.4vmin;
+    background:#14181f;
+    border:1px solid #3a4048;
+    border-radius:.8vmin;
+    font-family:'Consolas','Courier New',monospace;
+    font-size:4.6vmin;letter-spacing:.2em;
+    color:#ff9a2a;text-shadow:0 0 12px rgba(255,154,42,.8);
+    opacity:0;
+  }
+  #lfloor::before{
+    content:"▲";display:inline-block;margin-right:1.6vmin;
+    font-size:2.8vmin;color:#7aff9a;text-shadow:0 0 10px rgba(122,255,154,.8);
+    animation:blinkup 0.9s steps(2) infinite;
+  }
+  @keyframes blinkup{50%{opacity:.25;}}
+
+  /* ===== キャプション ===== */
+  .caption{
+    position:fixed;left:50%;bottom:15vh;
+    transform:translate(-50%,24px);
+    z-index:18;text-align:center;opacity:0;
+    width:92vw;pointer-events:none;
+  }
+  .caption h2{
+    font-size:clamp(20px,4.6vw,40px);
+    font-weight:600;letter-spacing:.14em;color:#fff;
+    text-shadow:0 2px 24px rgba(0,0,0,.8),0 0 8px rgba(0,0,0,.65);
+  }
+  .caption p{
+    margin-top:10px;
+    font-size:clamp(11px,2vw,14px);
+    letter-spacing:.32em;color:rgba(255,255,255,.88);
+    text-shadow:0 1px 12px rgba(0,0,0,.75);
+  }
+
+  /* ===== 固定UI ===== */
+  #ui-logo{
+    position:fixed;top:22px;left:26px;z-index:19;
+    font-family:Georgia,serif;font-size:17px;letter-spacing:.08em;
+    color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.7);
+  }
+  #ui-skip{
+    position:fixed;top:22px;right:26px;z-index:19;
+    font-size:11px;letter-spacing:.28em;
+    color:#fff;text-decoration:none;opacity:.8;
+    text-shadow:0 1px 10px rgba(0,0,0,.7);
+  }
+  #ui-skip:hover{opacity:1;}
+  #ui-bar{position:fixed;top:0;left:0;z-index:19;width:100%;height:3px;}
+  #ui-bar i{display:block;height:100%;width:0;background:linear-gradient(to right,var(--navy-light),var(--gold));}
+  #ui-scroll{
+    position:fixed;left:50%;bottom:26px;z-index:19;
+    transform:translateX(-50%);text-align:center;
+    font-size:10px;letter-spacing:.4em;color:#fff;
+    text-shadow:0 1px 10px rgba(0,0,0,.8);
+  }
+  #ui-scroll::after{
+    content:"";display:block;margin:10px auto 0;
+    width:1px;height:44px;
+    background:linear-gradient(to bottom,#fff,transparent);
+    animation:drop 1.6s ease-in-out infinite;
+  }
+  @keyframes drop{0%{transform:scaleY(0);transform-origin:top;}55%{transform:scaleY(1);transform-origin:top;}56%{transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+  @media (prefers-reduced-motion:reduce){
+    #kitanaut svg,#ui-scroll::after,#stars2,#lfloor::before{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="scroller"></div>
+
+<div id="stage">
+
+  <!-- 宇宙 -->
+  <div class="layer" id="space">
+    <div class="stars" id="stars1"></div>
+    <div class="stars" id="stars2"></div>
+    <div id="earth"></div>
+  </div>
+
+  <!-- 宇宙本社 -->
+  <div class="layer" id="plane-hq"></div>
+
+  <!-- 宇宙遊泳する社長 -->
+  <div id="kitanaut">
+    <svg viewBox="0 0 300 360" aria-label="宇宙服を着た代表">
+      <defs>
+        <radialGradient id="helmG" cx=".38" cy=".3" r="1">
+          <stop offset="0" stop-color="#eaf4ff" stop-opacity=".5"/>
+          <stop offset=".55" stop-color="#9cc4ea" stop-opacity=".2"/>
+          <stop offset="1" stop-color="#3a6a9a" stop-opacity=".35"/>
+        </radialGradient>
+        <linearGradient id="suitG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f4f7fa"/>
+          <stop offset="1" stop-color="#c9d2dc"/>
+        </linearGradient>
+        <clipPath id="helmClip"><circle cx="150" cy="112" r="66"/></clipPath>
+      </defs>
+      <!-- バックパック -->
+      <rect x="55" y="150" width="190" height="130" rx="20" fill="#aeb8c4" stroke="#7a8694" stroke-width="4"/>
+      <!-- ジェット噴射 -->
+      <g>
+        <polygon points="85,282 105,282 95,330" fill="#8ecbff" opacity=".85">
+          <animate attributeName="points" values="85,282 105,282 95,330;85,282 105,282 95,312;85,282 105,282 95,330" dur=".5s" repeatCount="indefinite"/>
+        </polygon>
+        <polygon points="195,282 215,282 205,330" fill="#8ecbff" opacity=".85">
+          <animate attributeName="points" values="195,282 215,282 205,318;195,282 215,282 205,334;195,282 215,282 205,318" dur=".44s" repeatCount="indefinite"/>
+        </polygon>
+      </g>
+      <!-- 腕 -->
+      <rect x="28" y="168" width="118" height="44" rx="22" fill="url(#suitG)" stroke="#9aa4b0" stroke-width="3" transform="rotate(-32 87 190)"/>
+      <rect x="154" y="168" width="118" height="44" rx="22" fill="url(#suitG)" stroke="#9aa4b0" stroke-width="3" transform="rotate(24 213 190)"/>
+      <circle cx="42" cy="140" r="20" fill="#f4f7fa" stroke="#D4A017" stroke-width="4"/>
+      <circle cx="262" cy="226" r="20" fill="#f4f7fa" stroke="#D4A017" stroke-width="4"/>
+      <!-- 胴体 -->
+      <path d="M92 176 Q150 158 208 176 L220 296 Q150 322 80 296 Z" fill="url(#suitG)" stroke="#9aa4b0" stroke-width="4"/>
+      <!-- 胸パネル -->
+      <rect x="118" y="208" width="64" height="44" rx="8" fill="#2c3a52" stroke="#1a2436" stroke-width="3"/>
+      <circle cx="134" cy="224" r="5" fill="#ff6a5a"/><circle cx="150" cy="224" r="5" fill="#ffd24a"/><circle cx="166" cy="224" r="5" fill="#6adf8a"/>
+      <text x="150" y="245" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#D4A017" letter-spacing="1">Vinculum</text>
+      <!-- ホース -->
+      <path d="M92 210 Q56 236 78 168 Q88 140 104 142" fill="none" stroke="#c3ccd6" stroke-width="9" stroke-linecap="round"/>
+      <!-- ネックリング -->
+      <ellipse cx="150" cy="172" rx="46" ry="14" fill="#8d97a4" stroke="#6a7482" stroke-width="3"/>
+      <!-- ヘルメット -->
+      <circle cx="150" cy="112" r="70" fill="#dfe8f2"/>
+      <g clip-path="url(#helmClip)">
+        <image href="assets/win2/kitano_head.png" x="83" y="46" width="134" height="146" preserveAspectRatio="xMidYMid slice"/>
+      </g>
+      <circle cx="150" cy="112" r="66" fill="url(#helmG)"/>
+      <path d="M96 84 Q120 52 162 56" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" opacity=".5"/>
+      <circle cx="150" cy="112" r="70" fill="none" stroke="#D4A017" stroke-width="6"/>
+      <!-- アンテナ -->
+      <line x1="212" y1="70" x2="228" y2="46" stroke="#8d97a4" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="230" cy="42" r="5" fill="#ff6a5a"/>
+    </svg>
+  </div>
+
+  <!-- 最終コピー -->
+  <div id="finale">
+    <div class="logo">Vinculum co.,ltd.</div>
+    <div class="sub">― ラテン語で <em>“絆”</em>。人と未来を、つなぐ会社。</div>
+    <a class="cta" href="VinculumHP.html">ENTER&nbsp;SITE</a>
+  </div>
+
+  <!-- リゾート（※Midjourney等の生成画像に差し替え可） -->
+  <div class="layer" id="resort">
+    <div class="sun"></div>
+    <div class="glitter"></div>
+    <svg class="deco" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <!-- ヤシの木シルエット -->
+      <g fill="#180f1e">
+        <path d="M1385 740 q18 -180 -30 -300 l26 6 q60 110 34 296 Z"/>
+        <g transform="translate(1378,446)">
+          <path d="M0 0 q-120 -60 -210 -10 q110 -80 216 -22 Z"/>
+          <path d="M4 -2 q-30 -130 -140 -170 q130 10 156 152 Z"/>
+          <path d="M8 0 q120 -70 208 -16 q-104 -76 -214 -30 Z"/>
+          <path d="M6 -4 q60 -110 170 -120 q-120 -30 -184 96 Z"/>
+        </g>
+        <path d="M170 760 q-14 -200 40 -330 l-28 8 q-66 120 -40 326 Z"/>
+        <g transform="translate(196,428)">
+          <path d="M0 0 q-130 -70 -224 -14 q118 -86 230 -28 Z"/>
+          <path d="M6 -2 q-20 -140 -128 -186 q126 16 148 164 Z"/>
+          <path d="M10 2 q126 -76 218 -18 q-110 -80 -224 -32 Z"/>
+        </g>
+      </g>
+      <!-- ウッドデッキの板目 -->
+      <g stroke="#241812" stroke-width="3" opacity=".7">
+        <line x1="0" y1="790" x2="1600" y2="770"/><line x1="0" y1="840" x2="1600" y2="826"/>
+      </g>
+      <!-- グラス（テーブル） -->
+      <g transform="translate(1120,700)">
+        <rect x="-90" y="18" width="200" height="14" rx="6" fill="#241812"/>
+        <rect x="-14" y="32" width="16" height="60" fill="#1c120e"/>
+        <path d="M20 18 L52 18 L44 -18 L28 -18 Z" fill="#ffb45a" opacity=".92"/>
+        <line x1="46" y1="-16" x2="58" y2="-40" stroke="#e84a6a" stroke-width="5" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="kitano-wrap">
+      <img src="assets/win2/kitano_cut.png" alt="休暇中の代表">
+      <svg class="acc" viewBox="0 0 734 479" preserveAspectRatio="xMidYMid meet">
+        <!-- レイ（花飾り） -->
+        <g>
+          <g fill="#ff7a9a">
+            <circle cx="286" cy="262" r="15"/><circle cx="308" cy="292" r="15"/><circle cx="340" cy="312" r="15"/>
+            <circle cx="378" cy="318" r="15"/><circle cx="414" cy="306" r="15"/><circle cx="442" cy="282" r="15"/>
+            <circle cx="458" cy="252" r="15"/>
+          </g>
+          <g fill="#ffd24a">
+            <circle cx="286" cy="262" r="6"/><circle cx="308" cy="292" r="6"/><circle cx="340" cy="312" r="6"/>
+            <circle cx="378" cy="318" r="6"/><circle cx="414" cy="306" r="6"/><circle cx="442" cy="282" r="6"/>
+            <circle cx="458" cy="252" r="6"/>
+          </g>
+        </g>
+        <!-- トロピカルドリンク -->
+        <g transform="translate(560,340)">
+          <path d="M0 0 L64 0 L48 74 L16 74 Z" fill="#ff9a4a" opacity=".95"/>
+          <rect x="24" y="74" width="16" height="34" fill="#e8e2d2"/>
+          <rect x="6" y="108" width="52" height="10" rx="5" fill="#e8e2d2"/>
+          <line x1="50" y1="4" x2="66" y2="-30" stroke="#e84a6a" stroke-width="6" stroke-linecap="round"/>
+          <path d="M10 -6 L34 -34 L44 -6 Z" fill="#6adf8a"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ビーチ（※Midjourney等の生成画像に差し替え可） -->
+  <div class="layer" id="beach">
+    <div class="sun"></div>
+    <div class="cloud" style="left:6%;top:12%;"></div>
+    <div class="cloud" style="left:42%;top:22%;transform:scale(.7);"></div>
+    <div class="cloud" style="left:66%;top:30%;transform:scale(.5);opacity:.8;"></div>
+    <div class="foam"></div>
+    <svg class="deco" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <!-- パラソル -->
+      <g transform="translate(300,520)">
+        <line x1="0" y1="0" x2="26" y2="330" stroke="#8a5a34" stroke-width="12"/>
+        <g>
+          <path d="M0 0 Q-170 60 -210 130 Q-60 96 0 110 Z" fill="#e85a5a"/>
+          <path d="M0 0 Q-40 90 0 110 Q60 92 0 0 Z" fill="#fff4e2"/>
+          <path d="M0 0 Q170 60 210 130 Q60 96 0 110 Z" fill="#e85a5a"/>
+          <path d="M0 0 Q-190 30 -210 130 L-150 118 Q-90 100 0 110 Q90 100 150 118 L210 130 Q186 32 0 0 Z" fill="none"/>
+        </g>
+      </g>
+      <!-- デッキチェア -->
+      <g transform="translate(210,800)">
+        <polygon points="0,0 190,-16 230,34 30,52" fill="#3aa0c8"/>
+        <polygon points="0,0 -44,-78 -8,-84 30,-8" fill="#3aa0c8"/>
+        <line x1="16" y1="46" x2="16" y2="86" stroke="#8a5a34" stroke-width="10"/>
+        <line x1="206" y1="30" x2="206" y2="70" stroke="#8a5a34" stroke-width="10"/>
+      </g>
+      <!-- ビーチボール -->
+      <g transform="translate(700,820)">
+        <circle r="44" fill="#fff"/>
+        <path d="M0 -44 A44 44 0 0 1 38 22 L0 0 Z" fill="#e85a5a"/>
+        <path d="M38 22 A44 44 0 0 1 -38 22 L0 0 Z" fill="#3aa0c8"/>
+        <circle r="44" fill="none" stroke="#d8d2c2" stroke-width="2"/>
+      </g>
+    </svg>
+    <div class="kitano-wrap">
+      <img src="assets/win2/kitano_cut.png" alt="休暇中の代表">
+      <svg class="acc" viewBox="0 0 734 479" preserveAspectRatio="xMidYMid meet">
+        <!-- トロピカルドリンク -->
+        <g transform="translate(150,320)">
+          <path d="M0 0 L64 0 L48 74 L16 74 Z" fill="#ffd24a" opacity=".95"/>
+          <rect x="24" y="74" width="16" height="34" fill="#e8e2d2"/>
+          <rect x="6" y="108" width="52" height="10" rx="5" fill="#e8e2d2"/>
+          <line x1="50" y1="4" x2="66" y2="-30" stroke="#e84a6a" stroke-width="6" stroke-linecap="round"/>
+          <path d="M10 -6 L34 -34 L44 -6 Z" fill="#6adf8a"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- フラッシュ -->
+  <div class="layer" id="flash"></div>
+
+  <!-- 写真プレーン（奥から手前の順） -->
+  <div class="layer plane" id="p9"></div>
+  <div class="layer plane" id="p8"></div>
+  <div class="layer plane" id="p7"></div>
+  <div class="layer plane" id="p6"></div>
+  <div class="layer plane" id="p5"></div>
+  <div class="layer plane" id="p4"></div>
+  <div class="layer plane" id="p3"></div>
+
+  <!-- エレベーター扉 -->
+  <div id="lift">
+    <div class="lpanel" id="lp-l"></div>
+    <div class="lpanel" id="lp-r"></div>
+    <div id="lfloor">1F</div>
+  </div>
+
+  <div class="layer plane" id="p2"></div>
+  <div class="layer plane" id="p1"></div>
+
+</div>
+
+<!-- キャプション -->
+<div class="caption" data-a="0.012" data-b="0.055"><h2>街の真ん中に、その扉はある。</h2><p>VINCULUM HEAD OFFICE</p></div>
+<div class="caption" data-a="0.245" data-b="0.30"><h2>ようこそ、Vinculum へ。</h2><p>RECEPTION</p></div>
+<div class="caption" data-a="0.315" data-b="0.365"><h2>扉の先に、私たちの日常。</h2><p>OUR OFFICE</p></div>
+<div class="caption" data-a="0.375" data-b="0.425"><h2>対話が、仕事を前へ進める。</h2><p>COMMUNICATION</p></div>
+<div class="caption" data-a="0.435" data-b="0.485"><h2>風通しのいい、働く場所。</h2><p>LOUNGE</p></div>
+<div class="caption" data-a="0.495" data-b="0.545"><h2>戦略は、静けさの中で。</h2><p>EXECUTIVE FLOOR</p></div>
+<div class="caption" data-a="0.565" data-b="0.645"><h2>トップの視座から、未来を描く。</h2><p>CEO OFFICE</p></div>
+<div class="caption" data-a="0.70"  data-b="0.77"><h2>よく働き、よく楽しむ。</h2><p>OFF TIME</p></div>
+<div class="caption" data-a="0.80"  data-b="0.855"><h2>人生も、事業も、豊かに。</h2><p>RESORT</p></div>
+<div class="caption" data-a="0.885" data-b="0.94"><h2>そして、常識のさらに上へ。</h2><p>TO THE SPACE</p></div>
+
+<!-- 固定UI -->
+<div id="ui-logo">Vinculum</div>
+<a id="ui-skip" href="VinculumHP.html">SKIP →</a>
+<div id="ui-bar"><i></i></div>
+<div id="ui-scroll">SCROLL</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
+  const seg = (p,a,b)=>clamp((p-a)/(b-a),0,1);
+  const ease = t=>t*t*(3-2*t);
+
+  function makeStars(el,n,size){
+    let s=[];
+    for(let i=0;i<n;i++){
+      const x=Math.random()*2200-100, y=Math.random()*1400-100;
+      s.push(x+"px "+y+"px 0 "+(Math.random()*size)+"px rgba(255,255,255,"+(0.4+Math.random()*0.6)+")");
+    }
+    const d=document.createElement("i");
+    d.style.cssText="position:absolute;width:1px;height:1px;border-radius:50%;background:#fff;box-shadow:"+s.join(",");
+    el.appendChild(d);
+  }
+  makeStars($("stars1"),160,0.6);
+  makeStars($("stars2"),90,1.1);
+
+  const P = i => $("p"+i);
+  const flash=$("flash"), earth=$("earth"), hq=$("plane-hq"),
+        beach=$("beach"), resort=$("resort"), kit=$("kitanaut"),
+        finale=$("finale"), bar=document.querySelector("#ui-bar i"),
+        cue=$("ui-scroll"), stars1=$("stars1"), stars2=$("stars2"),
+        lpL=$("lp-l"), lpR=$("lp-r"), lfloor=$("lfloor"), lift=$("lift");
+  const captions=[...document.querySelectorAll(".caption")];
+
+  /* 写真の中を「歩いて通り抜ける」 */
+  function flyThrough(el,p,a,b,zoom,noIn){
+    const t=seg(p,a,b);
+    const s=Math.pow(zoom||3.0,t);
+    const o=(noIn?1:ease(seg(t,0,0.2)))*(1-ease(seg(t,0.78,1)));
+    el.style.transform="scale("+s+")";
+    el.style.opacity=o;
+    el.style.visibility=o<=0?"hidden":"visible";
+  }
+
+  let target=0, cur=0;
+
+  function render(p){
+    /* --- 1 外観 → 2 エントランス --- */
+    flyThrough(P(1),p,0.0,0.085,3.4,true);
+    flyThrough(P(2),p,0.065,0.135,3.0);
+
+    /* --- 3 エレベーターホール --- */
+    const t3=seg(p,0.115,0.20);
+    P(3).style.transform="scale("+(1+t3*0.5)+")";
+    const o3=ease(seg(p,0.115,0.145))*(1-ease(seg(p,0.185,0.205)));
+    P(3).style.opacity=o3;
+    P(3).style.visibility=o3<=0?"hidden":"visible";
+
+    /* エレベーター扉 */
+    const closeT=ease(seg(p,0.15,0.185));
+    const openT=ease(seg(p,0.23,0.262));
+    const shut=closeT*(1-openT);
+    lpL.style.transform="translateX("+((shut-1)*102)+"%)";
+    lpR.style.transform="translateX("+((1-shut)*102)+"%)";
+    lfloor.style.opacity=shut>0.98?1:0;
+    const rideT=seg(p,0.185,0.23);
+    lfloor.textContent=(1+Math.round(rideT*8))+"F";
+    lift.style.transform=shut>0.98?"translateY("+(Math.sin(p*2400)*0.25)+"vh)":"none";
+    lift.style.visibility=(closeT>0&&openT<1)?"visible":"hidden";
+
+    /* --- 4〜8 社内 --- */
+    flyThrough(P(4),p,0.235,0.315,3.0);
+    flyThrough(P(5),p,0.30,0.375,3.0);
+    flyThrough(P(6),p,0.36,0.435,3.0);
+    flyThrough(P(7),p,0.42,0.495,3.0);
+    flyThrough(P(8),p,0.48,0.555,3.0);
+
+    /* --- 9 社長室（ヒーローシーン・ゆっくり） --- */
+    flyThrough(P(9),p,0.54,0.665,2.4);
+
+    /* --- フラッシュ --- */
+    flash.style.opacity=ease(seg(p,0.648,0.685))*(1-ease(seg(p,0.70,0.755)));
+
+    /* --- ビーチ --- */
+    const bIn=ease(seg(p,0.665,0.70)), bOut=1-ease(seg(p,0.775,0.805));
+    beach.style.opacity=bIn*bOut;
+    beach.style.visibility=(bIn*bOut)<=0?"hidden":"visible";
+    beach.style.transform="scale("+(1.06-0.06*ease(seg(p,0.665,0.805)))+")";
+
+    /* --- リゾート --- */
+    const rIn=ease(seg(p,0.79,0.822)), rOut=1-ease(seg(p,0.868,0.898));
+    resort.style.opacity=rIn*rOut;
+    resort.style.visibility=(rIn*rOut)<=0?"hidden":"visible";
+    resort.style.transform="scale("+(1.06-0.06*ease(seg(p,0.79,0.898)))+")";
+
+    /* --- 宇宙 --- */
+    const eT=ease(seg(p,0.885,1));
+    earth.style.opacity=ease(seg(p,0.885,0.92));
+    earth.style.transform="scale("+(1.0-0.55*eT)+") translateY("+(eT*26)+"vmin)";
+    stars1.style.transform="translateY("+(-(1-seg(p,0.86,1))*60)+"px)";
+    stars2.style.transform="translateY("+(-(1-seg(p,0.86,1))*120)+"px)";
+
+    /* 宇宙遊泳する社長 */
+    const kT=ease(seg(p,0.868,0.95));
+    const kO=ease(seg(p,0.868,0.892));
+    kit.style.opacity=kO;
+    const kx=108-86*kT, ky=78-54*kT;
+    kit.style.transform="translate("+kx+"vw,"+ky+"vh) scale("+(0.65+0.35*kT)+")";
+
+    /* --- 宇宙本社 --- */
+    const hT=ease(seg(p,0.912,0.968));
+    hq.style.opacity=hT;
+    hq.style.transform="scale("+(1.1-0.1*hT)+")";
+
+    const fT=ease(seg(p,0.955,0.995));
+    finale.style.opacity=fT;
+    finale.style.transform="translate(-50%,"+((1-fT)*36)+"px)";
+    finale.style.pointerEvents=fT>0.6?"auto":"none";
+
+    /* --- キャプション --- */
+    captions.forEach(c=>{
+      const a=+c.dataset.a, b=+c.dataset.b;
+      const io=ease(seg(p,a,a+0.025))*(1-ease(seg(p,b-0.025,b)));
+      c.style.opacity=io;
+      c.style.transform="translate(-50%,"+((1-io)*24)+"px)";
+    });
+
+    /* --- UI --- */
+    bar.style.width=(p*100)+"%";
+    cue.style.opacity=1-ease(seg(p,0.01,0.05));
+  }
+
+  function onScroll(){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    target=max>0?clamp(scrollY/max,0,1):0;
+  }
+  addEventListener("scroll",onScroll,{passive:true});
+  addEventListener("resize",onScroll);
+
+  function loop(){
+    cur+=(target-cur)*0.09;
+    if(Math.abs(target-cur)<0.0001)cur=target;
+    render(cur);
+    requestAnimationFrame(loop);
+  }
+  onScroll();
+  render(0);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
